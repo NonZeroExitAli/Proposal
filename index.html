@@ -273,7 +273,76 @@
     z-index: 1;
   }
 
-  /* ── SECTION 3: TRANSITION / BRIDGE ── */
+  /* ── MEMORY ZOOM OVERLAY ── */
+  #memory-zoom {
+    position: fixed;
+    inset: 0;
+    z-index: 900;
+    background: rgba(3,6,15,0.0);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    pointer-events: none;
+    transition: background 0.8s ease;
+  }
+  #memory-zoom.active {
+    background: rgba(3,6,15,0.92);
+    pointer-events: all;
+  }
+  #memory-zoom-inner {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 32px;
+    max-width: min(700px, 92vw);
+    width: 100%;
+    opacity: 0;
+    transform: scale(0.88);
+    transition: opacity 0.7s ease, transform 0.7s ease;
+  }
+  #memory-zoom.active #memory-zoom-inner {
+    opacity: 1;
+    transform: scale(1);
+  }
+  #memory-zoom-img {
+    width: 100%;
+    max-height: 55vh;
+    object-fit: cover;
+    border-radius: 2px;
+    border: 1px solid rgba(201,169,110,0.25);
+    filter: brightness(0.92) sepia(0.1);
+    box-shadow: 0 0 80px rgba(201,169,110,0.12), 0 40px 80px rgba(0,0,0,0.6);
+  }
+  #memory-zoom-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream);
+    text-align: center;
+    line-height: 1.3;
+  }
+  #memory-zoom-text {
+    font-size: 1.05rem;
+    font-weight: 300;
+    color: rgba(245,240,232,0.6);
+    text-align: center;
+    line-height: 1.9;
+    max-width: 500px;
+  }
+  #memory-zoom-num {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  /* gold shimmer line under title */
+  #memory-zoom-line {
+    width: 60px; height: 1px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    margin: -20px auto 0;
+  }
   #section-bridge {
     text-align: center;
     position: relative;
@@ -454,6 +523,103 @@
     z-index: 0;
   }
 
+  /* ── START OVERLAY ── */
+  #start-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 999;
+    background: var(--deep-navy);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 28px;
+    transition: opacity 1.2s ease;
+  }
+  #start-overlay.fade-out { opacity: 0; pointer-events: none; }
+  #start-overlay .overlay-title {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-style: italic;
+    font-weight: 300;
+    color: var(--cream);
+    text-align: center;
+    line-height: 1.5;
+    max-width: 480px;
+    padding: 0 30px;
+  }
+  #start-overlay .overlay-sub {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.4em;
+    color: rgba(201,169,110,0.6);
+    text-transform: uppercase;
+  }
+  #start-btn {
+    margin-top: 10px;
+    padding: 16px 48px;
+    border: 1px solid var(--gold);
+    background: transparent;
+    color: var(--gold-light);
+    font-family: 'Cinzel', serif;
+    font-size: 0.75rem;
+    letter-spacing: 0.35em;
+    text-transform: uppercase;
+    cursor: pointer;
+    border-radius: 0;
+    transition: background 0.3s, color 0.3s;
+    position: relative;
+    overflow: hidden;
+  }
+  #start-btn::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: var(--gold);
+    transform: scaleX(0);
+    transform-origin: left;
+    transition: transform 0.35s ease;
+    z-index: -1;
+  }
+  #start-btn:hover::before { transform: scaleX(1); }
+  #start-btn:hover { color: var(--deep-navy); }
+
+  /* ── MUSIC BUTTON ── */
+  #music-btn {
+    position: fixed;
+    bottom: 28px;
+    right: 28px;
+    z-index: 500;
+    width: 48px; height: 48px;
+    border-radius: 50%;
+    border: 1px solid rgba(201,169,110,0.5);
+    background: rgba(3,6,15,0.75);
+    backdrop-filter: blur(8px);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: border-color 0.3s, box-shadow 0.3s;
+    opacity: 0;
+    pointer-events: none;
+  }
+  #music-btn.show { opacity: 1; pointer-events: all; }
+  #music-btn:hover { border-color: var(--gold); box-shadow: 0 0 16px rgba(201,169,110,0.3); }
+  #music-btn svg { width: 18px; height: 18px; }
+
+  /* ── SCROLL PROGRESS ── */
+  #scroll-progress {
+    position: fixed;
+    top: 0; left: 0;
+    height: 2px;
+    background: linear-gradient(to right, var(--gold), var(--gold-light));
+    z-index: 998;
+    width: 0%;
+    transition: width 0.3s ease;
+    box-shadow: 0 0 8px rgba(201,169,110,0.6);
+  }
+
   /* ── RESPONSIVE ── */
   @media (max-width: 700px) {
     .memory-item {
@@ -474,6 +640,43 @@
 <body>
 
 <canvas id="starfield"></canvas>
+
+<!-- SCROLL PROGRESS -->
+<div id="scroll-progress"></div>
+
+<!-- START OVERLAY -->
+<div id="start-overlay">
+  <p class="overlay-sub">A message from Ali</p>
+  <p class="overlay-title">I made something for you,<br>Tota — sit back and enjoy ✦</p>
+  <button id="start-btn">Begin ✦</button>
+</div>
+
+<!-- MEMORY ZOOM OVERLAY -->
+<div id="memory-zoom">
+  <div id="memory-zoom-inner">
+    <p id="memory-zoom-num"></p>
+    <img id="memory-zoom-img" src="" alt="">
+    <div id="memory-zoom-line"></div>
+    <p id="memory-zoom-title"></p>
+    <p id="memory-zoom-text"></p>
+  </div>
+</div>
+
+<!-- MUSIC TOGGLE -->
+<button id="music-btn" title="Toggle music">
+  <svg id="music-icon-on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round">
+    <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+  </svg>
+  <svg id="music-icon-off" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" style="display:none">
+    <path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>
+    <line x1="2" y1="2" x2="22" y2="22"/>
+  </svg>
+</button>
+
+<!-- AUDIO (romantic piano — free use via CDN) -->
+<audio id="bg-music" loop>
+  <source src="https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3" type="audio/mpeg">
+</audio>
 
 <!-- ═══════════════════════════════════ -->
 <!--  SECTION 1 — INNOCENT OPENING       -->
@@ -501,7 +704,7 @@
   <div class="constellation-wrap">
 
     <!-- MEMORY 1 -->
-    <div class="memory-item left" data-scroll>
+    <div class="memory-item left" id="memory-1" data-scroll>
       <div class="memory-text">
         <p class="date"><!-- e.g. June 12, 2021 -->&nbsp;</p>
         <h3>That Burger Hit Different</h3>
@@ -512,14 +715,12 @@
         <div class="star-line"></div>
       </div>
       <div class="memory-photo">
-        <!-- Replace src with your photo URL or base64 -->
         <img src="photo1.jpg" alt="The day we met">
-
       </div>
     </div>
 
     <!-- MEMORY 2 -->
-    <div class="memory-item right" data-scroll>
+    <div class="memory-item right" id="memory-2" data-scroll>
       <div class="memory-text">
         <p class="date">&nbsp;</p>
         <h3>Nuweiba — Where Life Felt Full</h3>
@@ -530,12 +731,12 @@
         <div class="star-line"></div>
       </div>
       <div class="memory-photo">
-        <img src="photo2.jpg" alt="The day we met">
+        <img src="photo2.jpg" alt="Nuweiba">
       </div>
     </div>
 
     <!-- MEMORY 3 -->
-    <div class="memory-item left" data-scroll>
+    <div class="memory-item left" id="memory-3" data-scroll>
       <div class="memory-text">
         <p class="date">&nbsp;</p>
         <h3>My Favourite Kind of Crazy</h3>
@@ -545,8 +746,7 @@
         <div class="star-node"></div>
       </div>
       <div class="memory-photo">
-        <img src="photo3.jpg" alt="The day we met">
-        </div>
+        <img src="photo3.jpg" alt="My favourite kind of crazy">
       </div>
     </div>
 
@@ -606,6 +806,148 @@
 <!--  SCRIPTS                            -->
 <!-- ═══════════════════════════════════ -->
 <script>
+/* ── START OVERLAY + MUSIC + AUTOSCROLL ── */
+(function(){
+  const overlay   = document.getElementById('start-overlay');
+  const startBtn  = document.getElementById('start-btn');
+  const audio     = document.getElementById('bg-music');
+  const musicBtn  = document.getElementById('music-btn');
+  const iconOn    = document.getElementById('music-icon-on');
+  const iconOff   = document.getElementById('music-icon-off');
+  const progress  = document.getElementById('scroll-progress');
+
+  // Memory data for zoom overlay
+  const memories = [
+    {
+      num: '✦ Memory One ✦',
+      img: 'photo1.jpg',
+      title: 'That Burger Hit Different',
+      text: 'I still remember the day we met — and that first burger we shared. I didn\'t even have enough money to get home after... but honestly? Worth every penny. I\'d do it a thousand times over.'
+    },
+    {
+      num: '✦ Memory Two ✦',
+      img: 'photo2.jpg',
+      title: 'Nuweiba — Where Life Felt Full',
+      text: 'Do you remember Nuweiba? The way everything felt so good, so right? I realized then — it wasn\'t the place. It was you beside me that made me feel like I was truly living.'
+    },
+    {
+      num: '✦ Memory Three ✦',
+      img: 'photo3.jpg',
+      title: 'My Favourite Kind of Crazy',
+      text: 'The moment I knew — when I saw how beautifully weird, genuine, and free you are. You\'re not just the love of my life, Tota. You\'re my best friend. And I never want to be normal without you.'
+    },
+  ];
+
+  // sections and how many ms to pause on each before scrolling to next
+  const stops = [
+    { id: 'section-intro',    pause: 4000,  zoom: null },
+    { id: 'section-memories', pause: 500,   zoom: null },
+    { id: 'memory-1',         pause: 500,   zoom: 0 },
+    { id: 'memory-2',         pause: 500,   zoom: 1 },
+    { id: 'memory-3',         pause: 500,   zoom: 2 },
+    { id: 'section-bridge',   pause: 6000,  zoom: null },
+    { id: 'section-ring',     pause: 7000,  zoom: null },
+    { id: 'section-proposal', pause: 99999, zoom: null },
+  ];
+
+  const zoomOverlay = document.getElementById('memory-zoom');
+  const zoomImg     = document.getElementById('memory-zoom-img');
+  const zoomTitle   = document.getElementById('memory-zoom-title');
+  const zoomText    = document.getElementById('memory-zoom-text');
+  const zoomNum     = document.getElementById('memory-zoom-num');
+  const ZOOM_DURATION = 6000; // ms to show each memory fullscreen
+
+  function showZoom(index){
+    return new Promise(resolve => {
+      const m = memories[index];
+      zoomImg.src     = m.img;
+      zoomTitle.textContent = m.title;
+      zoomText.textContent  = m.text;
+      zoomNum.textContent   = m.num;
+      zoomOverlay.classList.add('active');
+      setTimeout(() => {
+        zoomOverlay.classList.remove('active');
+        setTimeout(resolve, 800); // wait for fade-out
+      }, ZOOM_DURATION);
+    });
+  }
+
+  let isScrolling = false;
+  let currentStop = 0;
+  let autoScrollEnabled = false;
+
+  function smoothScrollTo(targetY, duration){
+    return new Promise(resolve => {
+      const startY = window.scrollY;
+      const dist   = targetY - startY;
+      let start    = null;
+      function step(ts){
+        if(!start) start = ts;
+        const elapsed = ts - start;
+        const t = Math.min(elapsed / duration, 1);
+        const ease = t < 0.5 ? 2*t*t : -1+(4-2*t)*t;
+        window.scrollTo(0, startY + dist * ease);
+        if(t < 1) requestAnimationFrame(step);
+        else resolve();
+      }
+      requestAnimationFrame(step);
+    });
+  }
+
+  async function autoScroll(){
+    for(let i = 0; i < stops.length; i++){
+      currentStop = i;
+      const stop = stops[i];
+      const el = document.getElementById(stop.id);
+      if(!el) continue;
+      const rect = el.getBoundingClientRect();
+      const elCenter = rect.top + window.scrollY + rect.height / 2;
+      const targetY = Math.max(0, elCenter - window.innerHeight / 2);
+      const scrollDur = i === 0 ? 0 : 2200;
+      await smoothScrollTo(targetY, scrollDur);
+      await new Promise(r => setTimeout(r, stop.pause));
+      // zoom overlay for memory cards
+      if(stop.zoom !== null){
+        await showZoom(stop.zoom);
+      }
+    }
+  }
+
+  // scroll progress bar
+  window.addEventListener('scroll', () => {
+    const max = document.body.scrollHeight - window.innerHeight;
+    const pct = max > 0 ? (window.scrollY / max) * 100 : 0;
+    progress.style.width = pct + '%';
+  });
+
+  // music toggle
+  let muted = false;
+  musicBtn.addEventListener('click', () => {
+    muted = !muted;
+    audio.muted = muted;
+    iconOn.style.display  = muted ? 'none'  : 'block';
+    iconOff.style.display = muted ? 'block' : 'none';
+  });
+
+  // start button
+  startBtn.addEventListener('click', () => {
+    overlay.classList.add('fade-out');
+    setTimeout(() => { overlay.style.display = 'none'; }, 1300);
+    // play music (user gesture allows autoplay)
+    audio.volume = 0;
+    audio.play().catch(()=>{});
+    // fade in music
+    let vol = 0;
+    const fadeIn = setInterval(() => {
+      vol = Math.min(vol + 0.02, 0.55);
+      audio.volume = vol;
+      if(vol >= 0.55) clearInterval(fadeIn);
+    }, 120);
+    musicBtn.classList.add('show');
+    setTimeout(() => { autoScroll(); }, 1400);
+  });
+})();
+
 /* ── STARFIELD ── */
 (function(){
   const canvas = document.getElementById('starfield');
