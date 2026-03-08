@@ -1,0 +1,853 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A Night Just For Us</title>
+<link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@300;400&family=Montserrat:wght@200;300&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+  :root {
+    --gold: #c9a96e;
+    --gold-light: #e8d5a3;
+    --cream: #f5f0e8;
+    --deep-navy: #03060f;
+    --midnight: #070d1a;
+    --soft-white: rgba(255,255,255,0.85);
+  }
+
+  html { scroll-behavior: smooth; }
+
+  body {
+    background: var(--deep-navy);
+    color: var(--cream);
+    font-family: 'Cormorant Garamond', serif;
+    overflow-x: hidden;
+    cursor: default;
+  }
+
+  /* ── CANVAS STARS ── */
+  #starfield {
+    position: fixed;
+    top: 0; left: 0;
+    width: 100%; height: 100%;
+    z-index: 0;
+    pointer-events: none;
+  }
+
+  /* ── SHOOTING STARS ── */
+  .shooting-star {
+    position: fixed;
+    width: 2px;
+    height: 2px;
+    background: white;
+    border-radius: 50%;
+    z-index: 1;
+    pointer-events: none;
+    opacity: 0;
+  }
+  .shooting-star::after {
+    content: '';
+    position: absolute;
+    top: 50%; right: 0;
+    transform: translateY(-50%);
+    width: 120px; height: 1px;
+    background: linear-gradient(to left, rgba(255,255,255,0.8), transparent);
+  }
+
+  /* ── SECTIONS ── */
+  section {
+    position: relative;
+    z-index: 2;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 80px 40px;
+  }
+
+  /* ── SECTION 1: INNOCENT OPENING ── */
+  #section-intro {
+    text-align: center;
+  }
+  #section-intro .eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.7rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    opacity: 0;
+    animation: fadeUp 1.2s ease forwards 0.5s;
+  }
+  #section-intro h1 {
+    font-family: 'Cormorant Garamond', serif;
+    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.2;
+    margin-top: 20px;
+    opacity: 0;
+    animation: fadeUp 1.4s ease forwards 0.9s;
+  }
+  #section-intro .subtitle {
+    font-size: 1.1rem;
+    font-weight: 300;
+    color: rgba(245,240,232,0.5);
+    margin-top: 24px;
+    letter-spacing: 0.1em;
+    opacity: 0;
+    animation: fadeUp 1.4s ease forwards 1.3s;
+  }
+  .scroll-hint {
+    position: absolute;
+    bottom: 40px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    animation: fadeUp 1.2s ease forwards 2.2s;
+  }
+  .scroll-hint span {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.35em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .scroll-line {
+    width: 1px; height: 50px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    animation: scrollPulse 2s ease-in-out infinite;
+  }
+
+  /* ── DIVIDER ── */
+  .divider {
+    width: 1px;
+    height: 120px;
+    background: linear-gradient(to bottom, transparent, var(--gold), transparent);
+    margin: 0 auto;
+  }
+
+  /* ── SECTION 2: MEMORIES ── */
+  #section-memories {
+    padding: 100px 40px;
+  }
+  .memories-header {
+    text-align: center;
+    margin-bottom: 80px;
+  }
+  .memories-header .eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.45em;
+    color: var(--gold);
+    text-transform: uppercase;
+  }
+  .memories-header h2 {
+    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-weight: 300;
+    font-style: italic;
+    margin-top: 16px;
+    color: var(--cream);
+  }
+
+  .constellation-wrap {
+    position: relative;
+    width: 100%;
+    max-width: 900px;
+    margin: 0 auto;
+  }
+
+  .memory-item {
+    display: grid;
+    grid-template-columns: 1fr 80px 1fr;
+    align-items: center;
+    margin-bottom: 60px;
+    opacity: 0;
+    transform: translateY(40px);
+    transition: opacity 0.9s ease, transform 0.9s ease;
+  }
+  .memory-item.visible { opacity: 1; transform: translateY(0); }
+  .memory-item.right .memory-text { grid-column: 3; grid-row: 1; text-align: left; }
+  .memory-item.right .memory-star { grid-column: 2; grid-row: 1; }
+  .memory-item.right .memory-photo { grid-column: 1; grid-row: 1; }
+  .memory-item.left .memory-text { grid-column: 1; text-align: right; }
+  .memory-item.left .memory-star { grid-column: 2; }
+  .memory-item.left .memory-photo { grid-column: 3; }
+
+  .memory-text { padding: 0 30px; }
+  .memory-text .date {
+    font-family: 'Cinzel', serif;
+    font-size: 0.6rem;
+    letter-spacing: 0.4em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  .memory-text h3 {
+    font-size: 1.6rem;
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream);
+    margin-bottom: 10px;
+  }
+  .memory-text p {
+    font-size: 1rem;
+    font-weight: 300;
+    color: rgba(245,240,232,0.6);
+    line-height: 1.8;
+  }
+
+  .memory-star {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  }
+  .star-node {
+    width: 14px; height: 14px;
+    border-radius: 50%;
+    background: radial-gradient(circle, #fff 0%, var(--gold-light) 40%, transparent 70%);
+    box-shadow: 0 0 12px 4px rgba(201,169,110,0.5), 0 0 30px 8px rgba(201,169,110,0.2);
+    position: relative;
+    z-index: 2;
+    flex-shrink: 0;
+  }
+  .star-line {
+    position: absolute;
+    width: 1px;
+    background: linear-gradient(to bottom, var(--gold), transparent);
+    top: 14px;
+    bottom: -74px;
+    left: 50%;
+    transform: translateX(-50%);
+    opacity: 0.4;
+  }
+
+  .memory-photo {
+    width: 100%;
+    max-width: 260px;
+    aspect-ratio: 4/3;
+    border-radius: 2px;
+    background: rgba(255,255,255,0.04);
+    border: 1px solid rgba(201,169,110,0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  .memory-item.right .memory-photo { justify-self: end; }
+  .memory-item.left .memory-photo { justify-self: start; }
+  .memory-photo img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    filter: brightness(0.85) sepia(0.15);
+    transition: filter 0.4s;
+  }
+  .memory-photo img:hover { filter: brightness(0.95) sepia(0); }
+  .memory-photo .photo-placeholder {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 12px;
+    color: rgba(201,169,110,0.5);
+  }
+  .memory-photo .photo-placeholder svg { width: 32px; height: 32px; }
+  .memory-photo .photo-placeholder span {
+    font-family: 'Cinzel', serif;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+  }
+  .memory-photo::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background: linear-gradient(135deg, rgba(201,169,110,0.08) 0%, transparent 60%);
+    pointer-events: none;
+    z-index: 1;
+  }
+
+  /* ── SECTION 3: TRANSITION / BRIDGE ── */
+  #section-bridge {
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .bridge-text {
+    max-width: 600px;
+    margin: 0 auto;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1s ease, transform 1s ease;
+  }
+  .bridge-text.visible { opacity: 1; transform: translateY(0); }
+  .bridge-text p {
+    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-weight: 300;
+    font-style: italic;
+    line-height: 1.9;
+    color: rgba(245,240,232,0.75);
+  }
+  .bridge-text p em {
+    color: var(--gold-light);
+    font-style: italic;
+  }
+
+  /* ── SECTION 4: THE RING CONSTELLATION ── */
+  #section-ring {
+    text-align: center;
+    position: relative;
+  }
+  #ring-canvas {
+    width: min(500px, 90vw);
+    height: min(500px, 90vw);
+    margin: 0 auto 60px;
+  }
+  .ring-reveal-text {
+    opacity: 0;
+    transform: scale(0.9);
+    transition: opacity 1.2s ease, transform 1.2s ease;
+  }
+  .ring-reveal-text.visible { opacity: 1; transform: scale(1); }
+  .ring-reveal-text .eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    margin-bottom: 20px;
+  }
+
+  /* ── SECTION 5: THE PROPOSAL ── */
+  #section-proposal {
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .proposal-inner {
+    max-width: 700px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 2;
+  }
+  .proposal-eyebrow {
+    font-family: 'Cinzel', serif;
+    font-size: 0.65rem;
+    letter-spacing: 0.5em;
+    color: var(--gold);
+    text-transform: uppercase;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1s ease 0.2s, transform 1s ease 0.2s;
+  }
+  .proposal-eyebrow.visible { opacity: 1; transform: translateY(0); }
+  .proposal-question {
+    font-size: clamp(3rem, 8vw, 7rem);
+    font-weight: 300;
+    font-style: italic;
+    color: var(--cream);
+    line-height: 1.1;
+    margin: 30px 0 20px;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1.2s ease 0.6s, transform 1.2s ease 0.6s;
+  }
+  .proposal-question.visible { opacity: 1; transform: translateY(0); }
+  .proposal-name {
+    font-size: clamp(3.5rem, 9vw, 8rem);
+    font-weight: 300;
+    font-style: italic;
+    background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--cream));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    line-height: 1;
+    opacity: 0;
+    transform: translateY(30px);
+    transition: opacity 1.4s ease 1s, transform 1.4s ease 1s;
+  }
+  .proposal-name.visible { opacity: 1; transform: translateY(0); }
+  .proposal-message {
+    font-size: 1.1rem;
+    font-weight: 300;
+    line-height: 1.9;
+    color: rgba(245,240,232,0.65);
+    margin-top: 50px;
+    max-width: 520px;
+    margin-left: auto;
+    margin-right: auto;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: opacity 1.2s ease 1.6s, transform 1.2s ease 1.6s;
+  }
+  .proposal-message.visible { opacity: 1; transform: translateY(0); }
+  .proposal-signature {
+    font-size: 1.8rem;
+    font-style: italic;
+    font-weight: 300;
+    color: var(--gold-light);
+    margin-top: 50px;
+    opacity: 0;
+    transition: opacity 1.2s ease 2.2s;
+  }
+  .proposal-signature.visible { opacity: 1; }
+
+  /* ring emoji glowing */
+  .ring-emoji {
+    font-size: 4rem;
+    display: block;
+    margin: 40px auto 0;
+    opacity: 0;
+    filter: drop-shadow(0 0 20px rgba(201,169,110,0.8));
+    animation: none;
+    transition: opacity 1s ease 2.6s;
+  }
+  .ring-emoji.visible {
+    opacity: 1;
+    animation: ringFloat 3s ease-in-out infinite 3.5s;
+  }
+
+  /* confetti burst on proposal */
+  .petal {
+    position: fixed;
+    width: 6px; height: 10px;
+    border-radius: 50% 50% 0 50%;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 100;
+    animation: petalFall linear forwards;
+  }
+
+  /* ── ANIMATIONS ── */
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(30px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+  @keyframes scrollPulse {
+    0%, 100% { opacity: 0.4; transform: scaleY(1); }
+    50%       { opacity: 1;   transform: scaleY(1.15); }
+  }
+  @keyframes ringFloat {
+    0%, 100% { transform: translateY(0) rotate(-5deg); }
+    50%       { transform: translateY(-14px) rotate(5deg); }
+  }
+  @keyframes petalFall {
+    0%   { opacity: 1; transform: translateY(0) rotate(0deg) translateX(0); }
+    100% { opacity: 0; transform: translateY(100vh) rotate(720deg) translateX(var(--dx)); }
+  }
+  @keyframes twinkle {
+    0%, 100% { opacity: 1; }
+    50%       { opacity: 0.3; }
+  }
+
+  /* ── GLOW ORB ── */
+  .glow-orb {
+    position: absolute;
+    border-radius: 50%;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* ── RESPONSIVE ── */
+  @media (max-width: 700px) {
+    .memory-item {
+      grid-template-columns: 1fr;
+      grid-template-rows: auto auto auto;
+      gap: 20px;
+    }
+    .memory-item.right .memory-text,
+    .memory-item.left .memory-text { grid-column: 1; grid-row: 3; text-align: center; }
+    .memory-item.right .memory-star,
+    .memory-item.left .memory-star { grid-column: 1; grid-row: 1; }
+    .memory-item.right .memory-photo,
+    .memory-item.left .memory-photo { grid-column: 1; grid-row: 2; justify-self: center; max-width: 300px; width: 100%; }
+    .star-line { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<canvas id="starfield"></canvas>
+
+<!-- ═══════════════════════════════════ -->
+<!--  SECTION 1 — INNOCENT OPENING       -->
+<!-- ═══════════════════════════════════ -->
+<section id="section-intro">
+  <div class="glow-orb" style="width:600px;height:600px;background:radial-gradient(circle,rgba(201,169,110,0.06) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+  <p class="eyebrow">A little something for you</p>
+  <h1>I made something<br>just for us</h1>
+  <p class="subtitle">Keep scrolling, my love&nbsp;✦</p>
+  <div class="scroll-hint">
+    <span>scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ -->
+<!--  SECTION 2 — MEMORIES               -->
+<!-- ═══════════════════════════════════ -->
+<section id="section-memories">
+  <div class="memories-header">
+    <p class="eyebrow">Our constellation</p>
+    <h2>Every star, a memory</h2>
+  </div>
+
+  <div class="constellation-wrap">
+
+    <!-- MEMORY 1 -->
+    <div class="memory-item left" data-scroll>
+      <div class="memory-text">
+        <p class="date"><!-- e.g. June 12, 2021 -->&nbsp;</p>
+        <h3>That Burger Hit Different</h3>
+        <p>I still remember the day we met — and that first burger we shared. I didn't even have enough money to get home after... but honestly? Worth every penny. I'd do it a thousand times over.</p>
+      </div>
+      <div class="memory-star">
+        <div class="star-node"></div>
+        <div class="star-line"></div>
+      </div>
+      <div class="memory-photo">
+        <!-- Replace src with your photo URL or base64 -->
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          <span>Add your photo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEMORY 2 -->
+    <div class="memory-item right" data-scroll>
+      <div class="memory-text">
+        <p class="date">&nbsp;</p>
+        <h3>Nuweiba — Where Life Felt Full</h3>
+        <p>Do you remember Nuweiba? The way everything felt so good, so right? I realized then — it wasn't the place. It was you beside me that made me feel like I was truly living.</p>
+      </div>
+      <div class="memory-star">
+        <div class="star-node"></div>
+        <div class="star-line"></div>
+      </div>
+      <div class="memory-photo">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          <span>Add your photo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- MEMORY 3 -->
+    <div class="memory-item left" data-scroll>
+      <div class="memory-text">
+        <p class="date">&nbsp;</p>
+        <h3>My Favourite Kind of Crazy</h3>
+        <p>The moment I knew — when I saw how beautifully weird, genuine, and free you are. You're not just the love of my life, Tota. You're my best friend. And I never want to be normal without you.</p>
+      </div>
+      <div class="memory-star">
+        <div class="star-node"></div>
+      </div>
+      <div class="memory-photo">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/><path d="m21 15-5-5L5 21"/></svg>
+          <span>Add your photo</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ -->
+<!--  SECTION 3 — BRIDGE                 -->
+<!-- ═══════════════════════════════════ -->
+<section id="section-bridge">
+  <div class="glow-orb" style="width:800px;height:800px;background:radial-gradient(circle,rgba(100,120,200,0.07) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+  <div class="bridge-text" data-scroll>
+    <p>
+      Every night I look up at the stars<br>
+      and I think about how <em>lucky</em> I am —<br>
+      that in this entire universe,<br>
+      I get to share mine with you.
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ -->
+<!--  SECTION 4 — RING CONSTELLATION    -->
+<!-- ═══════════════════════════════════ -->
+<section id="section-ring">
+  <canvas id="ring-canvas"></canvas>
+  <div class="ring-reveal-text" data-scroll>
+    <p class="eyebrow">The stars have something to say</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ -->
+<!--  SECTION 5 — THE PROPOSAL           -->
+<!-- ═══════════════════════════════════ -->
+<section id="section-proposal">
+  <div class="glow-orb" style="width:900px;height:900px;background:radial-gradient(circle,rgba(201,169,110,0.09) 0%,transparent 65%);top:50%;left:50%;transform:translate(-50%,-50%)"></div>
+  <div class="proposal-inner">
+    <p class="proposal-eyebrow" data-proposal>With all the stars as my witness</p>
+    <p class="proposal-question" data-proposal>Will you marry me,</p>
+    <p class="proposal-name" data-proposal>
+      Tota?
+    </p>
+    <p class="proposal-message" data-proposal>
+      You are my favourite person, my safest place,<br>
+      and the most beautiful thing in my universe.<br>
+      From that burger to Nuweiba and every crazy moment in between —<br>
+      I want all of it, forever, with you.
+    </p>
+    <p class="proposal-signature" data-proposal>
+      — Forever yours, Ali
+    </p>
+    <span class="ring-emoji" data-proposal>💍</span>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════ -->
+<!--  SCRIPTS                            -->
+<!-- ═══════════════════════════════════ -->
+<script>
+/* ── STARFIELD ── */
+(function(){
+  const canvas = document.getElementById('starfield');
+  const ctx = canvas.getContext('2d');
+  let stars = [];
+  let W, H;
+
+  function resize(){
+    W = canvas.width  = window.innerWidth;
+    H = canvas.height = window.innerHeight;
+  }
+
+  function initStars(){
+    stars = [];
+    const count = Math.floor((W * H) / 3000);
+    for(let i = 0; i < count; i++){
+      stars.push({
+        x: Math.random() * W,
+        y: Math.random() * H,
+        r: Math.random() * 1.4 + 0.2,
+        alpha: Math.random() * 0.7 + 0.2,
+        speed: Math.random() * 0.003 + 0.001,
+        phase: Math.random() * Math.PI * 2,
+      });
+    }
+  }
+
+  function draw(t){
+    ctx.clearRect(0, 0, W, H);
+    const scrollFrac = window.scrollY / (document.body.scrollHeight - window.innerHeight);
+    stars.forEach(s => {
+      const twinkle = 0.5 + 0.5 * Math.sin(t * s.speed * 1000 + s.phase);
+      ctx.beginPath();
+      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+      ctx.fillStyle = `rgba(255,255,255,${s.alpha * (0.6 + 0.4 * twinkle)})`;
+      ctx.fill();
+    });
+    requestAnimationFrame(draw);
+  }
+
+  window.addEventListener('resize', ()=>{ resize(); initStars(); });
+  resize(); initStars();
+  requestAnimationFrame(draw);
+})();
+
+/* ── SHOOTING STARS ── */
+function shootingStar(){
+  const el = document.createElement('div');
+  el.className = 'shooting-star';
+  const startX = Math.random() * window.innerWidth;
+  const startY = Math.random() * window.innerHeight * 0.5;
+  el.style.cssText = `left:${startX}px;top:${startY}px;opacity:1;
+    animation:shootAnim ${0.6 + Math.random()*0.5}s linear forwards;
+    transform:rotate(${30 + Math.random()*20}deg)`;
+  document.body.appendChild(el);
+  setTimeout(()=>el.remove(), 1200);
+}
+// inject keyframes
+const ss = document.createElement('style');
+ss.textContent = `@keyframes shootAnim{
+  0%{opacity:0;transform:rotate(35deg) translateX(0)}
+  10%{opacity:1}
+  100%{opacity:0;transform:rotate(35deg) translateX(220px)}
+}`;
+document.head.appendChild(ss);
+setInterval(shootingStar, 3500);
+
+/* ── SCROLL REVEAL ── */
+const observers = [];
+document.querySelectorAll('[data-scroll]').forEach(el => {
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => { if(e.isIntersecting) { el.classList.add('visible'); obs.unobserve(el); }});
+  }, { threshold: 0.3 });
+  obs.observe(el);
+});
+
+/* ── RING CONSTELLATION CANVAS ── */
+(function(){
+  const canvas = document.getElementById('ring-canvas');
+  const ctx = canvas.getContext('2d');
+  const W = canvas.offsetWidth;
+  const H = canvas.offsetHeight;
+  canvas.width = W * devicePixelRatio;
+  canvas.height = H * devicePixelRatio;
+  ctx.scale(devicePixelRatio, devicePixelRatio);
+
+  const cx = W / 2, cy = H / 2;
+  const R = W * 0.32;
+  const STAR_COUNT = 18;
+  const stars = Array.from({length: STAR_COUNT}, (_, i) => {
+    const angle = (i / STAR_COUNT) * Math.PI * 2 - Math.PI / 2;
+    return { x: cx + Math.cos(angle) * R, y: cy + Math.sin(angle) * R, angle, lit: false, t: 0 };
+  });
+
+  // diamond top
+  const diamond = [
+    { x: cx, y: cy - R - 24 },
+    { x: cx - 14, y: cy - R - 10 },
+    { x: cx + 14, y: cy - R - 10 },
+  ];
+
+  let progress = 0;
+  let started = false;
+
+  function drawFrame(){
+    ctx.clearRect(0, 0, W, H);
+
+    // glowing ring path
+    ctx.beginPath();
+    ctx.arc(cx, cy, R, -Math.PI/2, -Math.PI/2 + progress * Math.PI * 2);
+    ctx.strokeStyle = 'rgba(201,169,110,0.25)';
+    ctx.lineWidth = 1.5;
+    ctx.stroke();
+
+    // constellation lines between stars
+    stars.forEach((s, i) => {
+      if(!s.lit) return;
+      const next = stars[(i+1) % STAR_COUNT];
+      if(!next.lit) return;
+      ctx.beginPath();
+      ctx.moveTo(s.x, s.y);
+      ctx.lineTo(next.x, next.y);
+      ctx.strokeStyle = 'rgba(201,169,110,0.3)';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    });
+
+    // stars
+    stars.forEach((s, i) => {
+      if(!s.lit) return;
+      s.t += 0.03;
+      const glow = 0.7 + 0.3 * Math.sin(s.t + i);
+      // outer glow
+      const grad = ctx.createRadialGradient(s.x, s.y, 0, s.x, s.y, 12);
+      grad.addColorStop(0, `rgba(255,245,200,${0.5 * glow})`);
+      grad.addColorStop(1, 'transparent');
+      ctx.beginPath(); ctx.arc(s.x, s.y, 12, 0, Math.PI*2);
+      ctx.fillStyle = grad; ctx.fill();
+      // star dot
+      ctx.beginPath(); ctx.arc(s.x, s.y, 2.5, 0, Math.PI*2);
+      ctx.fillStyle = `rgba(255,255,240,${0.9*glow})`; ctx.fill();
+    });
+
+    // diamond / ring top (after 80%)
+    if(progress > 0.8){
+      const dp = Math.min(1, (progress - 0.8) / 0.2);
+      ctx.globalAlpha = dp;
+      // diamond sparkle
+      const dgrad = ctx.createRadialGradient(cx, cy-R-17, 0, cx, cy-R-17, 22);
+      dgrad.addColorStop(0, 'rgba(255,255,255,0.9)');
+      dgrad.addColorStop(0.3, 'rgba(201,169,110,0.6)');
+      dgrad.addColorStop(1, 'transparent');
+      ctx.beginPath(); ctx.arc(cx, cy-R-17, 22, 0, Math.PI*2);
+      ctx.fillStyle = dgrad; ctx.fill();
+      // diamond shape
+      ctx.beginPath();
+      ctx.moveTo(cx, cy-R-30);
+      ctx.lineTo(cx-10, cy-R-17);
+      ctx.lineTo(cx, cy-R-8);
+      ctx.lineTo(cx+10, cy-R-17);
+      ctx.closePath();
+      ctx.fillStyle = 'rgba(255,255,255,0.9)'; ctx.fill();
+      ctx.strokeStyle = 'rgba(201,169,110,0.8)'; ctx.lineWidth = 1; ctx.stroke();
+      ctx.globalAlpha = 1;
+    }
+
+    requestAnimationFrame(drawFrame);
+  }
+  drawFrame();
+
+  // trigger animation on scroll
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting && !started){
+        started = true;
+        animateRing();
+      }
+    });
+  }, { threshold: 0.4 });
+  obs.observe(canvas);
+
+  function animateRing(){
+    const total = STAR_COUNT;
+    let lit = 0;
+    const step = () => {
+      progress = Math.min(1, progress + 0.005);
+      const shouldBeLit = Math.round(progress * total);
+      while(lit < shouldBeLit && lit < total){ stars[lit].lit = true; lit++; }
+      if(progress < 1) requestAnimationFrame(step);
+    };
+    step();
+  }
+})();
+
+/* ── PROPOSAL SECTION REVEAL ── */
+(function(){
+  const section = document.getElementById('section-proposal');
+  const els = section.querySelectorAll('[data-proposal]');
+  let triggered = false;
+  const obs = new IntersectionObserver(entries => {
+    entries.forEach(e => {
+      if(e.isIntersecting && !triggered){
+        triggered = true;
+        els.forEach(el => el.classList.add('visible'));
+        setTimeout(burstPetals, 2800);
+      }
+    });
+  }, { threshold: 0.3 });
+  obs.observe(section);
+})();
+
+/* ── PETAL BURST ── */
+function burstPetals(){
+  const colors = ['#c9a96e','#e8d5a3','#f5f0e8','#fff8f0','#d4b896','#ffe4cc'];
+  for(let i = 0; i < 80; i++){
+    setTimeout(()=>{
+      const el = document.createElement('div');
+      el.className = 'petal';
+      el.style.cssText = `
+        left:${20 + Math.random()*60}%;
+        top:${-5 + Math.random()*20}%;
+        background:${colors[Math.floor(Math.random()*colors.length)]};
+        --dx:${(Math.random()-0.5)*200}px;
+        animation-duration:${2 + Math.random()*3}s;
+        animation-delay:${Math.random()*0.5}s;
+        transform:rotate(${Math.random()*360}deg) scale(${0.6+Math.random()*0.8});
+        width:${4+Math.random()*6}px;
+        height:${6+Math.random()*10}px;
+        border-radius:${Math.random()>0.5?'50% 50% 0 50%':'50%'};
+      `;
+      document.body.appendChild(el);
+      setTimeout(()=>el.remove(), 6000);
+    }, i * 30);
+  }
+}
+</script>
+</body>
+</html>
