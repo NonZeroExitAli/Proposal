@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0">
 <title>A Night Just For Us</title>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Cinzel:wght@300;400&family=Montserrat:wght@200;300&display=swap" rel="stylesheet">
 <style>
@@ -52,7 +52,7 @@
     position: absolute;
     top: 50%; right: 0;
     transform: translateY(-50%);
-    width: 120px; height: 1px;
+    width: 80px; height: 1px;
     background: linear-gradient(to left, rgba(255,255,255,0.8), transparent);
   }
 
@@ -65,7 +65,7 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    padding: 80px 40px;
+    padding: 60px 20px;
   }
 
   /* ── SECTION 1: INNOCENT OPENING ── */
@@ -74,8 +74,8 @@
   }
   #section-intro .eyebrow {
     font-family: 'Cinzel', serif;
-    font-size: 0.7rem;
-    letter-spacing: 0.4em;
+    font-size: clamp(0.55rem, 2vw, 0.7rem);
+    letter-spacing: 0.35em;
     color: var(--gold);
     text-transform: uppercase;
     opacity: 0;
@@ -83,7 +83,7 @@
   }
   #section-intro h1 {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(2.5rem, 6vw, 5rem);
+    font-size: clamp(2rem, 8vw, 5rem);
     font-weight: 300;
     font-style: italic;
     color: var(--cream);
@@ -93,17 +93,18 @@
     animation: fadeUp 1.4s ease forwards 0.9s;
   }
   #section-intro .subtitle {
-    font-size: 1.1rem;
+    font-size: clamp(0.9rem, 3vw, 1.1rem);
     font-weight: 300;
     color: rgba(245,240,232,0.5);
     margin-top: 24px;
     letter-spacing: 0.1em;
     opacity: 0;
     animation: fadeUp 1.4s ease forwards 1.3s;
+    padding: 0 10px;
   }
   .scroll-hint {
     position: absolute;
-    bottom: 40px;
+    bottom: 30px;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -113,13 +114,13 @@
   }
   .scroll-hint span {
     font-family: 'Cinzel', serif;
-    font-size: 0.6rem;
-    letter-spacing: 0.35em;
+    font-size: 0.55rem;
+    letter-spacing: 0.3em;
     color: var(--gold);
     text-transform: uppercase;
   }
   .scroll-line {
-    width: 1px; height: 50px;
+    width: 1px; height: 40px;
     background: linear-gradient(to bottom, var(--gold), transparent);
     animation: scrollPulse 2s ease-in-out infinite;
   }
@@ -127,28 +128,28 @@
   /* ── DIVIDER ── */
   .divider {
     width: 1px;
-    height: 120px;
+    height: 80px;
     background: linear-gradient(to bottom, transparent, var(--gold), transparent);
     margin: 0 auto;
   }
 
   /* ── SECTION 2: MEMORIES ── */
   #section-memories {
-    padding: 100px 40px;
+    padding: 60px 16px;
   }
   .memories-header {
     text-align: center;
-    margin-bottom: 80px;
+    margin-bottom: 50px;
   }
   .memories-header .eyebrow {
     font-family: 'Cinzel', serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.45em;
+    font-size: clamp(0.55rem, 2vw, 0.65rem);
+    letter-spacing: 0.4em;
     color: var(--gold);
     text-transform: uppercase;
   }
   .memories-header h2 {
-    font-size: clamp(2rem, 4vw, 3.5rem);
+    font-size: clamp(1.6rem, 6vw, 3.5rem);
     font-weight: 300;
     font-style: italic;
     margin-top: 16px;
@@ -162,11 +163,12 @@
     margin: 0 auto;
   }
 
+  /* DESKTOP layout */
   .memory-item {
     display: grid;
-    grid-template-columns: 1fr 80px 1fr;
+    grid-template-columns: 1fr 60px 1fr;
     align-items: center;
-    margin-bottom: 60px;
+    margin-bottom: 50px;
     opacity: 0;
     transform: translateY(40px);
     transition: opacity 0.9s ease, transform 0.9s ease;
@@ -179,24 +181,24 @@
   .memory-item.left .memory-star { grid-column: 2; }
   .memory-item.left .memory-photo { grid-column: 3; }
 
-  .memory-text { padding: 0 30px; }
+  .memory-text { padding: 0 16px; }
   .memory-text .date {
     font-family: 'Cinzel', serif;
-    font-size: 0.6rem;
-    letter-spacing: 0.4em;
+    font-size: clamp(0.5rem, 1.8vw, 0.6rem);
+    letter-spacing: 0.35em;
     color: var(--gold);
     text-transform: uppercase;
     margin-bottom: 10px;
   }
   .memory-text h3 {
-    font-size: 1.6rem;
+    font-size: clamp(1.2rem, 4vw, 1.6rem);
     font-weight: 300;
     font-style: italic;
     color: var(--cream);
     margin-bottom: 10px;
   }
   .memory-text p {
-    font-size: 1rem;
+    font-size: clamp(0.85rem, 2.5vw, 1rem);
     font-weight: 300;
     color: rgba(245,240,232,0.6);
     line-height: 1.8;
@@ -209,10 +211,10 @@
     position: relative;
   }
   .star-node {
-    width: 14px; height: 14px;
+    width: 12px; height: 12px;
     border-radius: 50%;
     background: radial-gradient(circle, #fff 0%, var(--gold-light) 40%, transparent 70%);
-    box-shadow: 0 0 12px 4px rgba(201,169,110,0.5), 0 0 30px 8px rgba(201,169,110,0.2);
+    box-shadow: 0 0 10px 3px rgba(201,169,110,0.5), 0 0 24px 6px rgba(201,169,110,0.2);
     position: relative;
     z-index: 2;
     flex-shrink: 0;
@@ -221,8 +223,8 @@
     position: absolute;
     width: 1px;
     background: linear-gradient(to bottom, var(--gold), transparent);
-    top: 14px;
-    bottom: -74px;
+    top: 12px;
+    bottom: -62px;
     left: 50%;
     transform: translateX(-50%);
     opacity: 0.4;
@@ -230,7 +232,7 @@
 
   .memory-photo {
     width: 100%;
-    max-width: 260px;
+    max-width: 240px;
     aspect-ratio: 4/3;
     border-radius: 2px;
     background: rgba(255,255,255,0.04);
@@ -257,11 +259,11 @@
     gap: 12px;
     color: rgba(201,169,110,0.5);
   }
-  .memory-photo .photo-placeholder svg { width: 32px; height: 32px; }
+  .memory-photo .photo-placeholder svg { width: 28px; height: 28px; }
   .memory-photo .photo-placeholder span {
     font-family: 'Cinzel', serif;
-    font-size: 0.55rem;
-    letter-spacing: 0.3em;
+    font-size: 0.5rem;
+    letter-spacing: 0.25em;
     text-transform: uppercase;
   }
   .memory-photo::before {
@@ -284,6 +286,7 @@
     justify-content: center;
     pointer-events: none;
     transition: background 0.8s ease;
+    padding: 16px;
   }
   #memory-zoom.active {
     background: rgba(3,6,15,0.92);
@@ -293,8 +296,8 @@
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 32px;
-    max-width: min(700px, 92vw);
+    gap: 20px;
+    max-width: min(700px, 100%);
     width: 100%;
     opacity: 0;
     transform: scale(0.88);
@@ -306,16 +309,16 @@
   }
   #memory-zoom-img {
     width: 100%;
-    max-height: 55vh;
+    max-height: 45vh;
     object-fit: cover;
     border-radius: 2px;
     border: 1px solid rgba(201,169,110,0.25);
     filter: brightness(0.92) sepia(0.1);
-    box-shadow: 0 0 80px rgba(201,169,110,0.12), 0 40px 80px rgba(0,0,0,0.6);
+    box-shadow: 0 0 60px rgba(201,169,110,0.12), 0 30px 60px rgba(0,0,0,0.6);
   }
   #memory-zoom-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    font-size: clamp(1.3rem, 5vw, 2.6rem);
     font-weight: 300;
     font-style: italic;
     color: var(--cream);
@@ -323,43 +326,44 @@
     line-height: 1.3;
   }
   #memory-zoom-text {
-    font-size: 1.05rem;
+    font-size: clamp(0.85rem, 2.5vw, 1.05rem);
     font-weight: 300;
     color: rgba(245,240,232,0.6);
     text-align: center;
     line-height: 1.9;
     max-width: 500px;
+    padding: 0 8px;
   }
   #memory-zoom-num {
     font-family: 'Cinzel', serif;
-    font-size: 0.6rem;
-    letter-spacing: 0.5em;
+    font-size: 0.55rem;
+    letter-spacing: 0.45em;
     color: var(--gold);
     text-transform: uppercase;
   }
-  /* gold shimmer line under title */
   #memory-zoom-line {
     width: 60px; height: 1px;
     background: linear-gradient(to right, transparent, var(--gold), transparent);
-    margin: -20px auto 0;
+    margin: -12px auto 0;
   }
 
-  /* ── SECTION 3: BRIDGE TEXT ── */
+  /* ── BRIDGE ── */
   #section-bridge {
     text-align: center;
     position: relative;
     overflow: hidden;
   }
   .bridge-text {
-    max-width: 600px;
+    max-width: 560px;
     margin: 0 auto;
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 1s ease, transform 1s ease;
+    padding: 0 16px;
   }
   .bridge-text.visible { opacity: 1; transform: translateY(0); }
   .bridge-text p {
-    font-size: clamp(1.2rem, 2.5vw, 1.8rem);
+    font-size: clamp(1rem, 4vw, 1.8rem);
     font-weight: 300;
     font-style: italic;
     line-height: 1.9;
@@ -376,38 +380,24 @@
     position: relative;
   }
   #ring-canvas {
-    width: min(500px, 90vw);
-    height: min(500px, 90vw);
-    margin: 0 auto 60px;
+    width: min(380px, 85vw);
+    height: min(380px, 85vw);
+    margin: 0 auto 40px;
   }
   .ring-reveal-text {
     opacity: 0;
     transform: scale(0.9);
     transition: opacity 1.2s ease, transform 1.2s ease;
+    padding: 0 16px;
   }
   .ring-reveal-text.visible { opacity: 1; transform: scale(1); }
   .ring-reveal-text .eyebrow {
     font-family: 'Cinzel', serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.5em;
+    font-size: clamp(0.55rem, 2vw, 0.65rem);
+    letter-spacing: 0.45em;
     color: var(--gold);
     text-transform: uppercase;
     margin-bottom: 20px;
-  }
-  .ring-reveal-text h2 {
-    font-size: clamp(2.4rem, 4.5vw, 3.4rem);
-    font-weight: 300;
-    font-style: italic;
-    color: var(--cream);
-    margin-bottom: 18px;
-  }
-  .ring-reveal-text p {
-    font-size: 1.05rem;
-    font-weight: 300;
-    line-height: 1.9;
-    color: rgba(245,240,232,0.7);
-    max-width: 540px;
-    margin: 0 auto;
   }
 
   /* ── SECTION 5: THE PROPOSAL ── */
@@ -415,17 +405,19 @@
     text-align: center;
     position: relative;
     overflow: hidden;
+    padding: 60px 16px;
   }
   .proposal-inner {
     max-width: 700px;
     margin: 0 auto;
     position: relative;
     z-index: 2;
+    padding: 0 8px;
   }
   .proposal-eyebrow {
     font-family: 'Cinzel', serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.5em;
+    font-size: clamp(0.55rem, 2vw, 0.65rem);
+    letter-spacing: 0.45em;
     color: var(--gold);
     text-transform: uppercase;
     opacity: 0;
@@ -434,19 +426,19 @@
   }
   .proposal-eyebrow.visible { opacity: 1; transform: translateY(0); }
   .proposal-question {
-    font-size: clamp(3rem, 8vw, 7rem);
+    font-size: clamp(2.2rem, 10vw, 7rem);
     font-weight: 300;
     font-style: italic;
     color: var(--cream);
     line-height: 1.1;
-    margin: 30px 0 20px;
+    margin: 24px 0 16px;
     opacity: 0;
     transform: translateY(30px);
     transition: opacity 1.2s ease 0.6s, transform 1.2s ease 0.6s;
   }
   .proposal-question.visible { opacity: 1; transform: translateY(0); }
   .proposal-name {
-    font-size: clamp(3.5rem, 9vw, 8rem);
+    font-size: clamp(2.8rem, 12vw, 8rem);
     font-weight: 300;
     font-style: italic;
     background: linear-gradient(135deg, var(--gold-light), var(--gold), var(--cream));
@@ -460,35 +452,35 @@
   }
   .proposal-name.visible { opacity: 1; transform: translateY(0); }
   .proposal-message {
-    font-size: 1.1rem;
+    font-size: clamp(0.85rem, 3vw, 1.1rem);
     font-weight: 300;
     line-height: 1.9;
     color: rgba(245,240,232,0.65);
-    margin-top: 50px;
+    margin-top: 36px;
     max-width: 520px;
     margin-left: auto;
     margin-right: auto;
     opacity: 0;
     transform: translateY(20px);
     transition: opacity 1.2s ease 1.6s, transform 1.2s ease 1.6s;
+    padding: 0 4px;
   }
   .proposal-message.visible { opacity: 1; transform: translateY(0); }
   .proposal-signature {
-    font-size: 1.8rem;
+    font-size: clamp(1.4rem, 5vw, 1.8rem);
     font-style: italic;
     font-weight: 300;
     color: var(--gold-light);
-    margin-top: 50px;
+    margin-top: 36px;
     opacity: 0;
     transition: opacity 1.2s ease 2.2s;
   }
   .proposal-signature.visible { opacity: 1; }
 
-  /* ring emoji glowing */
   .ring-emoji {
-    font-size: 4rem;
+    font-size: clamp(2.5rem, 8vw, 4rem);
     display: block;
-    margin: 40px auto 0;
+    margin: 30px auto 0;
     opacity: 0;
     filter: drop-shadow(0 0 20px rgba(201,169,110,0.8));
     animation: none;
@@ -499,7 +491,6 @@
     animation: ringFloat 3s ease-in-out infinite 3.5s;
   }
 
-  /* confetti burst on proposal */
   .petal {
     position: fixed;
     width: 6px; height: 10px;
@@ -521,7 +512,7 @@
   }
   @keyframes ringFloat {
     0%, 100% { transform: translateY(0) rotate(-5deg); }
-    50%       { transform: translateY(-14px) rotate(5deg); }
+    50%       { transform: translateY(-12px) rotate(5deg); }
   }
   @keyframes petalFall {
     0%   { opacity: 1; transform: translateY(0) rotate(0deg) translateX(0); }
@@ -550,43 +541,44 @@
     flex-direction: column;
     align-items: center;
     justify-content: center;
-    gap: 28px;
+    gap: 22px;
     transition: opacity 1.2s ease;
+    padding: 24px;
   }
   #start-overlay.fade-out { opacity: 0; pointer-events: none; }
   #start-overlay .overlay-title {
     font-family: 'Cormorant Garamond', serif;
-    font-size: clamp(1.6rem, 4vw, 2.8rem);
+    font-size: clamp(1.3rem, 6vw, 2.8rem);
     font-style: italic;
     font-weight: 300;
     color: var(--cream);
     text-align: center;
     line-height: 1.5;
     max-width: 480px;
-    padding: 0 30px;
   }
   #start-overlay .overlay-sub {
     font-family: 'Cinzel', serif;
-    font-size: 0.65rem;
-    letter-spacing: 0.4em;
+    font-size: clamp(0.55rem, 2vw, 0.65rem);
+    letter-spacing: 0.35em;
     color: rgba(201,169,110,0.6);
     text-transform: uppercase;
   }
   #start-btn {
-    margin-top: 10px;
-    padding: 16px 48px;
+    margin-top: 6px;
+    padding: 14px 36px;
     border: 1px solid var(--gold);
     background: transparent;
     color: var(--gold-light);
     font-family: 'Cinzel', serif;
-    font-size: 0.75rem;
-    letter-spacing: 0.35em;
+    font-size: clamp(0.6rem, 2vw, 0.75rem);
+    letter-spacing: 0.3em;
     text-transform: uppercase;
     cursor: pointer;
     border-radius: 0;
     transition: background 0.3s, color 0.3s;
     position: relative;
     overflow: hidden;
+    touch-action: manipulation;
   }
   #start-btn::before {
     content: '';
@@ -598,16 +590,18 @@
     transition: transform 0.35s ease;
     z-index: -1;
   }
-  #start-btn:hover::before { transform: scaleX(1); }
-  #start-btn:hover { color: var(--deep-navy); }
+  #start-btn:hover::before,
+  #start-btn:active::before { transform: scaleX(1); }
+  #start-btn:hover,
+  #start-btn:active { color: var(--deep-navy); }
 
   /* ── MUSIC BUTTON ── */
   #music-btn {
     position: fixed;
-    bottom: 28px;
-    right: 28px;
+    bottom: 20px;
+    right: 20px;
     z-index: 500;
-    width: 48px; height: 48px;
+    width: 44px; height: 44px;
     border-radius: 50%;
     border: 1px solid rgba(201,169,110,0.5);
     background: rgba(3,6,15,0.75);
@@ -620,10 +614,12 @@
     transition: border-color 0.3s, box-shadow 0.3s;
     opacity: 0;
     pointer-events: none;
+    touch-action: manipulation;
   }
   #music-btn.show { opacity: 1; pointer-events: all; }
-  #music-btn:hover { border-color: var(--gold); box-shadow: 0 0 16px rgba(201,169,110,0.3); }
-  #music-btn svg { width: 18px; height: 18px; }
+  #music-btn:hover,
+  #music-btn:active { border-color: var(--gold); box-shadow: 0 0 16px rgba(201,169,110,0.3); }
+  #music-btn svg { width: 16px; height: 16px; }
 
   /* ── SCROLL PROGRESS ── */
   #scroll-progress {
@@ -637,107 +633,65 @@
     box-shadow: 0 0 8px rgba(201,169,110,0.6);
   }
 
-  /* ── RESPONSIVE (original) ── */
+  /* ── MOBILE RESPONSIVE ── */
   @media (max-width: 700px) {
-    .memory-item {
-      grid-template-columns: 1fr;
-      grid-template-rows: auto auto auto;
-      gap: 20px;
-    }
-    .memory-item.right .memory-text,
-    .memory-item.left .memory-text { grid-column: 1; grid-row: 3; text-align: center; }
-    .memory-item.right .memory-star,
-    .memory-item.left .memory-star { grid-column: 1; grid-row: 1; }
-    .memory-item.right .memory-photo,
-    .memory-item.left .memory-photo { grid-column: 1; grid-row: 2; justify-self: center; max-width: 300px; width: 100%; }
-    .star-line { display: none; }
-  }
-
-  /* ── MOBILE TWEAKS (added) ── */
-  @media (max-width: 768px) {
     section {
-      padding: 60px 20px;
+      padding: 50px 16px;
+      min-height: 100svh;
     }
 
     .memory-item {
       grid-template-columns: 1fr;
       grid-template-rows: auto auto auto;
-      row-gap: 24px;
-      text-align: center;
+      gap: 16px;
+      margin-bottom: 40px;
     }
     .memory-item.right .memory-text,
     .memory-item.left .memory-text {
-      grid-column: 1;
+      grid-column: 1; grid-row: 3;
       text-align: center;
-      padding: 0 10px;
-    }
-    .memory-item.right .memory-photo,
-    .memory-item.left .memory-photo {
-      grid-column: 1;
-      justify-self: center;
+      padding: 0;
     }
     .memory-item.right .memory-star,
     .memory-item.left .memory-star {
-      grid-column: 1;
-      order: -1;
+      grid-column: 1; grid-row: 1;
+    }
+    .memory-item.right .memory-photo,
+    .memory-item.left .memory-photo {
+      grid-column: 1; grid-row: 2;
+      justify-self: center;
+      max-width: min(320px, 90vw);
+      width: 100%;
+    }
+    .star-line { display: none; }
+
+    .memory-text p { font-size: 0.9rem; }
+
+    #memory-zoom {
+      padding: 12px;
+      align-items: flex-end;
+    }
+    #memory-zoom.active {
+      align-items: center;
+    }
+    #memory-zoom-inner {
+      gap: 14px;
+    }
+    #memory-zoom-img {
+      max-height: 40vh;
     }
 
-    .memory-photo {
-      max-width: 220px;
-    }
+    .divider { height: 60px; }
 
-    #section-intro h1 {
-      font-size: 2.2rem;
-    }
-    #section-intro .subtitle {
-      font-size: 0.9rem;
-      padding: 0 10px;
-    }
+    #section-memories { padding: 50px 12px; }
+    .memories-header { margin-bottom: 36px; }
 
-    .bridge-text p,
-    .proposal-message {
-      font-size: 1rem;
-      padding: 0 10px;
-    }
-
-    .proposal-question {
-      font-size: 2.4rem;
-    }
-    .proposal-name {
-      font-size: 2.8rem;
-    }
-
-    #ring-canvas {
-      width: 90vw;
-      height: 90vw;
-      margin-bottom: 40px;
-    }
-
-    #start-overlay .overlay-title {
-      padding: 0 20px;
-      font-size: 1.4rem;
-    }
+    .shooting-star::after { width: 60px; }
   }
 
-  @media (max-width: 480px) {
-    section {
-      padding: 50px 16px;
-    }
-
-    .scroll-hint {
-      bottom: 20px;
-    }
-
-    .memory-photo {
-      max-width: 190px;
-    }
-
-    #music-btn {
-      bottom: 18px;
-      right: 18px;
-      width: 42px;
-      height: 42px;
-    }
+  @media (max-width: 380px) {
+    .proposal-question { font-size: 2rem; }
+    .proposal-name { font-size: 2.5rem; }
   }
 </style>
 </head>
@@ -777,8 +731,439 @@
   </svg>
 </button>
 
-<!-- Your sections, scripts, and audio continue exactly as in your original file... -->
-<!-- (omitted here for brevity; use the rest of your existing HTML/JS/audio from paste.txt unchanged) -->
+<!-- AUDIO -->
+<audio id="bg-music" loop>
+  <source src="data:audio/mpeg;base64," type="audio/mpeg">
+</audio>
 
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 1: INTRO -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="section-intro">
+  <div class="glow-orb" style="width:400px;height:400px;background:radial-gradient(circle,rgba(201,169,110,0.06) 0%,transparent 70%);top:50%;left:50%;transform:translate(-50%,-50%);"></div>
+  <p class="eyebrow">A night just for us</p>
+  <h1>Under the same stars,<br>always</h1>
+  <p class="subtitle">Scroll down, and let the night unfold…</p>
+  <div class="scroll-hint">
+    <span>Scroll</span>
+    <div class="scroll-line"></div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 2: MEMORIES -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="section-memories">
+  <div class="memories-header">
+    <p class="eyebrow">Our story</p>
+    <h2>Moments that made us</h2>
+  </div>
+
+  <div class="constellation-wrap">
+
+    <!-- Memory 1 -->
+    <div class="memory-item left">
+      <div class="memory-text">
+        <p class="date">The beginning</p>
+        <h3>When I first saw you</h3>
+        <p>I didn't know it yet, but everything was about to change. You walked in and the whole room shifted.</p>
+      </div>
+      <div class="memory-star">
+        <div class="star-node"></div>
+        <div class="star-line"></div>
+      </div>
+      <div class="memory-photo">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <span>Add photo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Memory 2 -->
+    <div class="memory-item right">
+      <div class="memory-text">
+        <p class="date">Our first adventure</p>
+        <h3>Lost together</h3>
+        <p>We got so lost that day, but somehow it was perfect. I realised I could get lost anywhere, as long as it was with you.</p>
+      </div>
+      <div class="memory-star">
+        <div class="star-node"></div>
+        <div class="star-line"></div>
+      </div>
+      <div class="memory-photo">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <span>Add photo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Memory 3 -->
+    <div class="memory-item left">
+      <div class="memory-text">
+        <p class="date">A quiet evening</p>
+        <h3>Just us, nothing else</h3>
+        <p>The world disappeared that night. It was just you, me, and the silence that felt like home.</p>
+      </div>
+      <div class="memory-star">
+        <div class="star-node"></div>
+        <div class="star-line"></div>
+      </div>
+      <div class="memory-photo">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <span>Add photo</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Memory 4 -->
+    <div class="memory-item right">
+      <div class="memory-text">
+        <p class="date">Every ordinary day</p>
+        <h3>My favourite place</h3>
+        <p>I never knew that ordinary days could feel extraordinary. Then I started spending them with you.</p>
+      </div>
+      <div class="memory-star">
+        <div class="star-node"></div>
+      </div>
+      <div class="memory-photo">
+        <div class="photo-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
+            <path d="M21 15l-5-5L5 21"/>
+          </svg>
+          <span>Add photo</span>
+        </div>
+      </div>
+    </div>
+
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 3: BRIDGE -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="section-bridge">
+  <div class="bridge-text">
+    <p>
+      Every moment with you has been a gift.<br>
+      Every laugh, every silence, every <em>everything</em>.<br><br>
+      And now I want to ask you something<br>
+      I've been thinking about<br>
+      <em>for a very long time…</em>
+    </p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 4: RING CONSTELLATION -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="section-ring">
+  <canvas id="ring-canvas"></canvas>
+  <div class="ring-reveal-text">
+    <p class="eyebrow">The stars aligned</p>
+  </div>
+</section>
+
+<!-- ═══════════════════════════════════════════ -->
+<!-- SECTION 5: THE PROPOSAL -->
+<!-- ═══════════════════════════════════════════ -->
+<section id="section-proposal">
+  <div class="proposal-inner">
+    <p class="proposal-eyebrow">With all my heart</p>
+    <p class="proposal-question">Will you marry me,</p>
+    <p class="proposal-name">Tota?</p>
+    <p class="proposal-message">
+      You are my home, my adventure, my peace and my excitement.
+      I want to spend every day making you smile, building a life
+      that's as beautiful as you are. There's no one else I'd rather
+      walk through this world with.
+    </p>
+    <p class="proposal-signature">— Always yours, Ali ✦</p>
+    <span class="ring-emoji">💍</span>
+  </div>
+</section>
+
+<script>
+// ══════════════════════════════════════
+// STARFIELD
+// ══════════════════════════════════════
+const canvas = document.getElementById('starfield');
+const ctx = canvas.getContext('2d');
+let stars = [];
+
+function resizeCanvas() {
+  canvas.width = window.innerWidth;
+  canvas.height = window.innerHeight;
+}
+
+function createStars() {
+  stars = [];
+  const count = Math.floor((window.innerWidth * window.innerHeight) / 3000);
+  for (let i = 0; i < count; i++) {
+    stars.push({
+      x: Math.random() * canvas.width,
+      y: Math.random() * canvas.height,
+      r: Math.random() * 1.2 + 0.2,
+      alpha: Math.random(),
+      speed: Math.random() * 0.005 + 0.002,
+      phase: Math.random() * Math.PI * 2
+    });
+  }
+}
+
+function drawStars(t) {
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  for (const s of stars) {
+    const a = 0.3 + 0.7 * Math.abs(Math.sin(s.phase + t * s.speed));
+    ctx.beginPath();
+    ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    ctx.fillStyle = `rgba(255,255,255,${a})`;
+    ctx.fill();
+  }
+  requestAnimationFrame(drawStars);
+}
+
+resizeCanvas();
+createStars();
+requestAnimationFrame(drawStars);
+window.addEventListener('resize', () => { resizeCanvas(); createStars(); });
+
+// ══════════════════════════════════════
+// SHOOTING STARS
+// ══════════════════════════════════════
+function shootStar() {
+  const el = document.createElement('div');
+  el.className = 'shooting-star';
+  const startX = Math.random() * window.innerWidth;
+  const startY = Math.random() * window.innerHeight * 0.5;
+  el.style.cssText = `left:${startX}px;top:${startY}px;`;
+  document.body.appendChild(el);
+  const angle = 30 + Math.random() * 20;
+  const dist = 150 + Math.random() * 200;
+  const rad = angle * Math.PI / 180;
+  el.animate([
+    { opacity: 0, transform: 'translate(0,0)' },
+    { opacity: 1, transform: `translate(${Math.cos(rad)*20}px,${Math.sin(rad)*20}px)`, offset: 0.1 },
+    { opacity: 0, transform: `translate(${Math.cos(rad)*dist}px,${Math.sin(rad)*dist}px)` }
+  ], { duration: 800 + Math.random() * 400, easing: 'ease-out' }).onfinish = () => el.remove();
+}
+setInterval(shootStar, 3500);
+
+// ══════════════════════════════════════
+// START BUTTON
+// ══════════════════════════════════════
+document.getElementById('start-btn').addEventListener('click', () => {
+  const overlay = document.getElementById('start-overlay');
+  overlay.classList.add('fade-out');
+  setTimeout(() => overlay.style.display = 'none', 1200);
+  setTimeout(() => document.getElementById('music-btn').classList.add('show'), 1500);
+  tryPlayMusic();
+});
+
+// ══════════════════════════════════════
+// MUSIC
+// ══════════════════════════════════════
+const audio = document.getElementById('bg-music');
+let musicOn = false;
+
+function tryPlayMusic() {
+  audio.volume = 0.3;
+  audio.play().then(() => { musicOn = true; updateMusicIcon(); }).catch(() => {});
+}
+
+document.getElementById('music-btn').addEventListener('click', () => {
+  if (musicOn) { audio.pause(); musicOn = false; }
+  else { audio.play(); musicOn = true; }
+  updateMusicIcon();
+});
+
+function updateMusicIcon() {
+  document.getElementById('music-icon-on').style.display = musicOn ? '' : 'none';
+  document.getElementById('music-icon-off').style.display = musicOn ? 'none' : '';
+}
+
+// ══════════════════════════════════════
+// SCROLL PROGRESS
+// ══════════════════════════════════════
+window.addEventListener('scroll', () => {
+  const pct = window.scrollY / (document.body.scrollHeight - window.innerHeight) * 100;
+  document.getElementById('scroll-progress').style.width = pct + '%';
+});
+
+// ══════════════════════════════════════
+// SCROLL REVEAL
+// ══════════════════════════════════════
+const revealEls = [
+  ...document.querySelectorAll('.memory-item'),
+  ...document.querySelectorAll('.bridge-text'),
+  ...document.querySelectorAll('.ring-reveal-text'),
+  ...document.querySelectorAll('.proposal-eyebrow'),
+  ...document.querySelectorAll('.proposal-question'),
+  ...document.querySelectorAll('.proposal-name'),
+  ...document.querySelectorAll('.proposal-message'),
+  ...document.querySelectorAll('.proposal-signature'),
+  ...document.querySelectorAll('.ring-emoji')
+];
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(e => { if (e.isIntersecting) e.target.classList.add('visible'); });
+}, { threshold: 0.2 });
+
+revealEls.forEach(el => observer.observe(el));
+
+// ══════════════════════════════════════
+// RING CONSTELLATION CANVAS
+// ══════════════════════════════════════
+const ringCanvas = document.getElementById('ring-canvas');
+const rCtx = ringCanvas.getContext('2d');
+const size = ringCanvas.offsetWidth;
+ringCanvas.width = size * window.devicePixelRatio;
+ringCanvas.height = size * window.devicePixelRatio;
+rCtx.scale(window.devicePixelRatio, window.devicePixelRatio);
+const W = size, H = size;
+const cx = W / 2, cy = H / 2;
+
+const ringStars = [];
+const ringRadius = W * 0.28;
+const count = 18;
+for (let i = 0; i < count; i++) {
+  const a = (i / count) * Math.PI * 2 - Math.PI / 2;
+  ringStars.push({
+    x: cx + Math.cos(a) * ringRadius,
+    y: cy + Math.sin(a) * ringRadius,
+    r: 1.5 + Math.random(),
+    phase: Math.random() * Math.PI * 2
+  });
+}
+// Scattered stars
+for (let i = 0; i < 40; i++) {
+  const a = Math.random() * Math.PI * 2;
+  const r = (W * 0.18) + Math.random() * (W * 0.22);
+  ringStars.push({
+    x: cx + Math.cos(a) * r,
+    y: cy + Math.sin(a) * r,
+    r: 0.8 + Math.random() * 0.8,
+    phase: Math.random() * Math.PI * 2,
+    scattered: true
+  });
+}
+
+let ringT = 0;
+function drawRing() {
+  rCtx.clearRect(0, 0, W, H);
+  ringT += 0.015;
+  // Glow
+  const grd = rCtx.createRadialGradient(cx, cy, 0, cx, cy, ringRadius * 1.4);
+  grd.addColorStop(0, 'rgba(201,169,110,0.06)');
+  grd.addColorStop(1, 'rgba(201,169,110,0)');
+  rCtx.fillStyle = grd;
+  rCtx.fillRect(0, 0, W, H);
+  // Lines between ring stars
+  for (let i = 0; i < count; i++) {
+    const s1 = ringStars[i];
+    const s2 = ringStars[(i + 1) % count];
+    const alpha = 0.12 + 0.08 * Math.sin(ringT + i * 0.4);
+    rCtx.beginPath();
+    rCtx.moveTo(s1.x, s1.y);
+    rCtx.lineTo(s2.x, s2.y);
+    rCtx.strokeStyle = `rgba(201,169,110,${alpha})`;
+    rCtx.lineWidth = 0.6;
+    rCtx.stroke();
+  }
+  // Stars
+  for (const s of ringStars) {
+    const a = 0.5 + 0.5 * Math.sin(ringT * (s.scattered ? 0.7 : 1.2) + s.phase);
+    const color = s.scattered ? `rgba(255,255,255,${a * 0.5})` : `rgba(255,255,255,${a})`;
+    rCtx.beginPath();
+    rCtx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
+    rCtx.fillStyle = color;
+    rCtx.fill();
+    if (!s.scattered) {
+      rCtx.beginPath();
+      rCtx.arc(s.x, s.y, s.r * 2.5, 0, Math.PI * 2);
+      rCtx.fillStyle = `rgba(201,169,110,${a * 0.15})`;
+      rCtx.fill();
+    }
+  }
+  // Centre glow
+  const cGrd = rCtx.createRadialGradient(cx, cy, 0, cx, cy, W * 0.08);
+  cGrd.addColorStop(0, `rgba(201,169,110,${0.25 + 0.1 * Math.sin(ringT)})`);
+  cGrd.addColorStop(1, 'rgba(201,169,110,0)');
+  rCtx.fillStyle = cGrd;
+  rCtx.beginPath();
+  rCtx.arc(cx, cy, W * 0.08, 0, Math.PI * 2);
+  rCtx.fill();
+  requestAnimationFrame(drawRing);
+}
+drawRing();
+
+// ══════════════════════════════════════
+// CONFETTI ON PROPOSAL VISIBLE
+// ══════════════════════════════════════
+let confettiFired = false;
+const proposalObserver = new IntersectionObserver((entries) => {
+  entries.forEach(e => {
+    if (e.isIntersecting && !confettiFired) {
+      confettiFired = true;
+      setTimeout(fireConfetti, 2800);
+    }
+  });
+}, { threshold: 0.5 });
+proposalObserver.observe(document.getElementById('section-proposal'));
+
+function fireConfetti() {
+  const colors = ['#c9a96e','#e8d5a3','#fff8e8','#d4af7a','#f5f0e8'];
+  for (let i = 0; i < 60; i++) {
+    setTimeout(() => {
+      const p = document.createElement('div');
+      p.className = 'petal';
+      const x = 20 + Math.random() * 60;
+      const dx = (Math.random() - 0.5) * 180;
+      p.style.cssText = `left:${x}vw;top:-10px;background:${colors[Math.floor(Math.random()*colors.length)]};--dx:${dx}px;animation-duration:${2+Math.random()*2}s;`;
+      document.body.appendChild(p);
+      setTimeout(() => p.remove(), 4500);
+    }, i * 60);
+  }
+}
+
+// ══════════════════════════════════════
+// MEMORY PHOTO CLICK ZOOM
+// ══════════════════════════════════════
+document.querySelectorAll('.memory-photo').forEach((photo, i) => {
+  const img = photo.querySelector('img');
+  if (!img) return;
+  photo.style.cursor = 'pointer';
+  const h3 = photo.closest('.memory-item').querySelector('h3');
+  const p  = photo.closest('.memory-item').querySelector('p:not(.date)');
+  photo.addEventListener('click', () => {
+    document.getElementById('memory-zoom-img').src = img.src;
+    document.getElementById('memory-zoom-title').textContent = h3?.textContent || '';
+    document.getElementById('memory-zoom-text').textContent = p?.textContent || '';
+    document.getElementById('memory-zoom-num').textContent = `✦ ${String(i+1).padStart(2,'0')} ✦`;
+    document.getElementById('memory-zoom').classList.add('active');
+  });
+});
+document.getElementById('memory-zoom').addEventListener('click', function(e) {
+  if (e.target === this || e.target === document.getElementById('memory-zoom-inner')) {
+    this.classList.remove('active');
+  }
+});
+</script>
 </body>
 </html>
