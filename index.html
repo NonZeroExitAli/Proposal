@@ -731,10 +731,7 @@
   </svg>
 </button>
 
-<!-- AUDIO -->
-<audio id="bg-music" loop>
-  <source src="data:audio/mpeg;base64," type="audio/mpeg">
-</audio>
+<!-- No audio element needed - using Web Audio API -->
 
 <!-- ═══════════════════════════════════════════ -->
 <!-- SECTION 1: INTRO -->
@@ -775,13 +772,7 @@
         <div class="star-line"></div>
       </div>
       <div class="memory-photo">
-        <div class="photo-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-            <path d="M21 15l-5-5L5 21"/>
-          </svg>
-          <span>Add photo</span>
-        </div>
+        <img src="photo1.jpg" alt="Memory 1">
       </div>
     </div>
 
@@ -797,13 +788,7 @@
         <div class="star-line"></div>
       </div>
       <div class="memory-photo">
-        <div class="photo-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-            <path d="M21 15l-5-5L5 21"/>
-          </svg>
-          <span>Add photo</span>
-        </div>
+        <img src="photo2.jpg" alt="Memory 2">
       </div>
     </div>
 
@@ -819,13 +804,7 @@
         <div class="star-line"></div>
       </div>
       <div class="memory-photo">
-        <div class="photo-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-            <path d="M21 15l-5-5L5 21"/>
-          </svg>
-          <span>Add photo</span>
-        </div>
+        <img src="photo3.jpg" alt="Memory 3">
       </div>
     </div>
 
@@ -840,13 +819,7 @@
         <div class="star-node"></div>
       </div>
       <div class="memory-photo">
-        <div class="photo-placeholder">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-            <rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="8.5" cy="8.5" r="1.5"/>
-            <path d="M21 15l-5-5L5 21"/>
-          </svg>
-          <span>Add photo</span>
-        </div>
+        <img src="photo3.jpg" alt="Memory 4">
       </div>
     </div>
 
@@ -977,20 +950,157 @@ document.getElementById('start-btn').addEventListener('click', () => {
 });
 
 // ══════════════════════════════════════
-// MUSIC
+// MUSIC — Web Audio API romantic piano
 // ══════════════════════════════════════
-const audio = document.getElementById('bg-music');
+let audioCtx = null;
 let musicOn = false;
+let musicNodes = [];
+let musicInterval = null;
+
+// Romantic chord progression: F major feel — soft, warm
+const NOTES = {
+  C4:261.63, D4:293.66, E4:329.63, F4:349.23, G4:392.00,
+  A4:440.00, B4:493.88, C5:523.25, D5:587.33, E5:659.25,
+  F5:698.46, G5:783.99, A5:880.00,
+  C3:130.81, D3:146.83, E3:164.81, F3:174.61, G3:196.00, A3:220.00
+};
+
+// Chord sequences — dreamy, romantic
+const PROGRESSION = [
+  // F major
+  [NOTES.F3, NOTES.C4, NOTES.F4, NOTES.A4],
+  // A minor
+  [NOTES.A3, NOTES.E4, NOTES.A4, NOTES.C5],
+  // Bb major
+  [NOTES.G3, NOTES.D4, NOTES.G4, NOTES.B4],  // simplified
+  // C major
+  [NOTES.C3, NOTES.G3, NOTES.C4, NOTES.E4],
+];
+
+const MELODY = [
+  [NOTES.C5, 0.5], [NOTES.D5, 0.5], [NOTES.E5, 1],
+  [NOTES.D5, 0.5], [NOTES.C5, 0.5], [NOTES.A4, 1.5],
+  [NOTES.G4, 0.5], [NOTES.A4, 0.5], [NOTES.C5, 1],
+  [NOTES.B4, 0.5], [NOTES.A4, 0.5], [NOTES.G4, 2],
+];
+
+function createAudioCtx() {
+  if (!audioCtx) audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  return audioCtx;
+}
+
+function playNote(ctx, freq, startTime, duration, vol = 0.12, isChord = false) {
+  const osc = ctx.createOscillator();
+  const gain = ctx.createGain();
+  const convolver = ctx.createConvolver ? null : null;
+  
+  osc.type = 'sine';
+  osc.frequency.setValueAtTime(freq, startTime);
+  
+  // Piano-like envelope
+  gain.gain.setValueAtTime(0, startTime);
+  gain.gain.linearRampToValueAtTime(vol, startTime + 0.02);
+  gain.gain.exponentialRampToValueAtTime(vol * 0.6, startTime + 0.1);
+  gain.gain.exponentialRampToValueAtTime(0.001, startTime + duration);
+  
+  // Add a soft overtone for piano warmth
+  const osc2 = ctx.createOscillator();
+  const gain2 = ctx.createGain();
+  osc2.type = 'sine';
+  osc2.frequency.setValueAtTime(freq * 2, startTime);
+  gain2.gain.setValueAtTime(0, startTime);
+  gain2.gain.linearRampToValueAtTime(vol * 0.15, startTime + 0.01);
+  gain2.gain.exponentialRampToValueAtTime(0.001, startTime + duration * 0.5);
+  
+  // Master reverb-like effect via gain shaping
+  const master = ctx.createGain();
+  master.gain.value = 0.85;
+  
+  osc.connect(gain);
+  gain.connect(master);
+  osc2.connect(gain2);
+  gain2.connect(master);
+  master.connect(ctx.destination);
+  
+  osc.start(startTime);
+  osc.stop(startTime + duration + 0.1);
+  osc2.start(startTime);
+  osc2.stop(startTime + duration * 0.5);
+  
+  musicNodes.push(osc, osc2, gain, gain2, master);
+  return duration;
+}
+
+function playChord(ctx, notes, startTime, duration) {
+  notes.forEach(freq => playNote(ctx, freq, startTime, duration, 0.06, true));
+}
+
+let chordIndex = 0;
+let melodyIndex = 0;
+let nextChordTime = 0;
+let nextMelodyTime = 0;
+
+function scheduleMusicLoop() {
+  if (!audioCtx || !musicOn) return;
+  const now = audioCtx.currentTime;
+  const LOOK_AHEAD = 0.1;
+  const CHORD_DURATION = 3.5;
+  const MELODY_BEAT = 0.55;
+
+  // Schedule chords
+  while (nextChordTime < now + LOOK_AHEAD + 0.5) {
+    if (nextChordTime >= now - 0.1) {
+      playChord(audioCtx, PROGRESSION[chordIndex % PROGRESSION.length], nextChordTime, CHORD_DURATION);
+    }
+    nextChordTime += CHORD_DURATION;
+    chordIndex++;
+  }
+
+  // Schedule melody notes
+  while (nextMelodyTime < now + LOOK_AHEAD + 0.5) {
+    if (nextMelodyTime >= now - 0.1) {
+      const [freq, dur] = MELODY[melodyIndex % MELODY.length];
+      playNote(audioCtx, freq, nextMelodyTime, dur * MELODY_BEAT * 1.8, 0.10);
+    }
+    const dur = MELODY[melodyIndex % MELODY.length][1];
+    nextMelodyTime += dur * MELODY_BEAT;
+    melodyIndex++;
+  }
+}
+
+function startMusic() {
+  const ctx = createAudioCtx();
+  if (ctx.state === 'suspended') ctx.resume();
+  musicOn = true;
+  nextChordTime = ctx.currentTime + 0.1;
+  nextMelodyTime = ctx.currentTime + 0.1;
+  chordIndex = 0;
+  melodyIndex = 0;
+  scheduleMusicLoop();
+  musicInterval = setInterval(scheduleMusicLoop, 80);
+  updateMusicIcon();
+}
+
+function stopMusic() {
+  musicOn = false;
+  clearInterval(musicInterval);
+  // Fade out
+  musicNodes.forEach(n => {
+    try {
+      if (n.gain) { n.gain.linearRampToValueAtTime(0, audioCtx.currentTime + 0.5); }
+    } catch(e) {}
+  });
+  setTimeout(() => { musicNodes = []; }, 600);
+  updateMusicIcon();
+}
 
 function tryPlayMusic() {
-  audio.volume = 0.3;
-  audio.play().then(() => { musicOn = true; updateMusicIcon(); }).catch(() => {});
+  try { startMusic(); } catch(e) {}
 }
 
 document.getElementById('music-btn').addEventListener('click', () => {
-  if (musicOn) { audio.pause(); musicOn = false; }
-  else { audio.play(); musicOn = true; }
-  updateMusicIcon();
+  if (musicOn) stopMusic();
+  else tryPlayMusic();
 });
 
 function updateMusicIcon() {
